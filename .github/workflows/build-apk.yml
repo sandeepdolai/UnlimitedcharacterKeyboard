@@ -27,11 +27,11 @@ jobs:
         with:
           gradle-version: '8.13'
 
-      - name: Reconstruct Android Studio project
+      - name: Verify and extract Android Studio project
         shell: bash
         run: |
-          cat source/part-*.b64 | base64 --decode > /tmp/PasteboardKeyboard-AndroidStudio.zip
-          unzip -q /tmp/PasteboardKeyboard-AndroidStudio.zip -d .
+          echo "1429f2b93384e67b83f92eee398740b00c7f1144079050f6a657fa3aea917945  PasteboardKeyboard-AndroidStudio.zip" | sha256sum --check
+          unzip -q PasteboardKeyboard-AndroidStudio.zip -d .
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
