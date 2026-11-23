@@ -33,6 +33,10 @@ jobs:
           echo "1429f2b93384e67b83f92eee398740b00c7f1144079050f6a657fa3aea917945  PasteboardKeyboard-AndroidStudio.zip" | sha256sum --check
           unzip -q PasteboardKeyboard-AndroidStudio.zip -d .
 
+      - name: Fix EditText single-line declarations
+        run: |
+          find PasteboardKeyboard/app/src/main/java -name '*.kt' -print0 | xargs -0 sed -i 's/singleLine = true/setSingleLine(true)/g'
+
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4
         with:
