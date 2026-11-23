@@ -19,6 +19,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.ScrollView
@@ -260,7 +261,7 @@ class PasteboardImeService : InputMethodService() {
             else -> 18f
         }
         gravity = Gravity.CENTER
-        setTypeface(typeface, if (label in listOf("?123", "ABC", "⇧", "⌫", "↵")) Typeface.MEDIUM else Typeface.NORMAL)
+        setTypeface(typeface, if (label in listOf("?123", "ABC", "⇧", "⌫", "↵")) Typeface.BOLD else Typeface.NORMAL)
         setTextColor(
             if (darkMode) {
                 if (label == "↵") 0xFFFFFFFF.toInt() else 0xFFF8F8FB.toInt()
@@ -500,6 +501,7 @@ class PasteboardImeService : InputMethodService() {
             "s" -> listOf("ß", "ś", "š")
             else -> listOf(label, label.uppercase())
         }
+        var popup: PopupWindow? = null
         val row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             setPadding(dp(4), dp(4), dp(4), dp(4))
@@ -515,15 +517,15 @@ class PasteboardImeService : InputMethodService() {
                 setOnClickListener {
                     currentInputConnection?.commitText(text, 1)
                     dismissPreview()
-                    runCatching { popup.dismiss() }
+                    runCatching { popup?.dismiss() }
                     refreshSuggestions()
                 }
             }, LinearLayout.LayoutParams(-2, dp(42)))
         }
-        val popup = PopupWindow(row, -2, -2, true)
+        popup = PopupWindow(row, -2, -2, true)
         val location = IntArray(2)
         anchor.getLocationOnScreen(location)
-        popup.showAtLocation(root, Gravity.NO_GRAVITY, location[0], location[1] - dp(52))
+        popup?.showAtLocation(root, Gravity.NO_GRAVITY, location[0], location[1] - dp(52))
     }
 
     private fun renderSnippetLibrary() {
